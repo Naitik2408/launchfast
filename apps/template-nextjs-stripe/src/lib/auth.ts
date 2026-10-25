@@ -45,14 +45,16 @@ export async function getSessionUser() {
       .eq("id", user.id)
       .maybeSingle();
 
+    const userPlan = (user.app_metadata?.plan as "free" | "pro") || (user.user_metadata?.plan as "free" | "pro") || (user.email === "admin@example.com" ? "pro" : "free");
+
     const fallbackProfile: DatabaseProfile = {
       id: user.id,
       email: user.email || null,
       full_name: (user.user_metadata?.full_name as string) || (user.email?.split("@")[0] ?? "User"),
       avatar_url: (user.user_metadata?.avatar_url as string) || null,
-      plan: user.email === "admin@example.com" ? "pro" : "free",
-      stripe_customer_id: null,
-      stripe_subscription_id: null,
+      plan: userPlan,
+      stripe_customer_id: (user.app_metadata?.stripe_customer_id as string) || null,
+      stripe_subscription_id: (user.app_metadata?.stripe_subscription_id as string) || null,
       created_at: user.created_at,
       updated_at: new Date().toISOString(),
     };

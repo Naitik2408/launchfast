@@ -35,18 +35,32 @@ export async function POST(req: Request) {
       const subscriptionId = session.subscription as string;
 
       if (userId) {
-        // 1. Upgrade user's tier to 'pro' in Supabase
-        await supabaseAdmin
-          .from("profiles")
-          .update({
-            plan: "pro",
-            stripe_customer_id: customerId,
-            stripe_subscription_id: subscriptionId,
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", userId);
+        // 1. Upgrade user's tier to 'pro' in auth user_metadata & app_metadata
+        try {
+          await supabaseAdmin.auth.admin.updateUserById(userId, {
+            app_metadata: { plan: "pro", stripe_customer_id: customerId, stripe_subscription_id: subscriptionId },
+            user_metadata: { plan: "pro" },
+          });
+        } catch (authErr) {
+          console.error("Failed to update user app_metadata:", authErr);
+        }
 
-        // 2. Dispatch receipt email
+        // 2. Upgrade user's tier to 'pro' in Supabase profiles table if it exists
+        try {
+          await supabaseAdmin
+            .from("profiles")
+            .upsert({
+              id: userId,
+              plan: "pro",
+              stripe_customer_id: customerId,
+              stripe_subscription_id: subscriptionId,
+              updated_at: new Date().toISOString(),
+            });
+        } catch (dbErr) {
+          console.warn("Profiles table update skipped or not present:", dbErr);
+        }
+
+        // 3. Dispatch receipt email
         if (session.customer_details?.email) {
           try {
             await sendEmail({
