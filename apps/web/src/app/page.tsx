@@ -7,6 +7,7 @@ import PricingSection from "../components/pricing-section";
 
 export default function HomePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSlide, setActiveSlide] = useState(0);
   const demoUrl = process.env.NEXT_PUBLIC_DEMO_URL || (typeof window !== "undefined" && window.location.hostname === "localhost" ? "http://localhost:3001" : "https://demo.launchfast.naitik.work");
 
   const steps = [
@@ -166,10 +167,12 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* 3 Story Cards with Hand-Sketched Connecting Arrows */}
-          <div className="relative grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10 md:gap-12 items-start max-w-lg md:max-w-none mx-auto w-full">
+          {/* ========================================================================= */}
+          {/* 1. DESKTOP VIEW: 3 Story Cards with Connecting Arrows (md and up)         */}
+          {/* ========================================================================= */}
+          <div className="hidden md:grid relative grid-cols-3 gap-10 lg:gap-12 items-start w-full">
             {/* Hand-drawn connecting pencil arrow 1 -> 2 */}
-            <div className="hidden md:block absolute top-[28%] left-[30%] -translate-x-1/2 w-20 h-10 pointer-events-none z-10 text-[#3a3530]/70">
+            <div className="absolute top-[28%] left-[30%] -translate-x-1/2 w-20 h-10 pointer-events-none z-10 text-[#3a3530]/70">
               <svg viewBox="0 0 80 40" fill="none" className="w-full h-full stroke-current" strokeWidth="1.6" strokeLinecap="round">
                 <path d="M 8 26 Q 40 8 70 20" />
                 <path d="M 60 14 L 72 20 L 62 27" />
@@ -177,7 +180,7 @@ export default function HomePage() {
             </div>
 
             {/* Hand-drawn connecting pencil arrow 2 -> 3 */}
-            <div className="hidden md:block absolute top-[28%] left-[64%] -translate-x-1/2 w-20 h-10 pointer-events-none z-10 text-[#3a3530]/70">
+            <div className="absolute top-[28%] left-[64%] -translate-x-1/2 w-20 h-10 pointer-events-none z-10 text-[#3a3530]/70">
               <svg viewBox="0 0 80 40" fill="none" className="w-full h-full stroke-current" strokeWidth="1.6" strokeLinecap="round">
                 <path d="M 8 26 Q 40 8 70 20" />
                 <path d="M 60 14 L 72 20 L 62 27" />
@@ -186,33 +189,107 @@ export default function HomePage() {
 
             {steps.map((item, idx) => (
               <div key={idx} className="flex flex-col items-center text-center group w-full">
-                <div className="relative w-full aspect-[4/3] max-w-[280px] sm:max-w-[320px] md:max-w-none flex items-center justify-center hover:scale-[1.03] transition-all duration-200">
+                <div className="relative w-full aspect-[4/3] flex items-center justify-center hover:scale-[1.03] transition-all duration-200">
                   <Image
                     src={item.src}
                     alt={item.alt}
                     fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 360px"
+                    sizes="(max-width: 1200px) 33vw, 360px"
                     className="object-contain filter drop-shadow-[4px_6px_1px_rgba(35,31,28,0.42)] hover:drop-shadow-[6px_9px_1px_rgba(35,31,28,0.28)] transition-all duration-200"
                     priority
                   />
                 </div>
 
                 <div className="mt-3 space-y-1 max-w-[260px]">
-                  <h3 className="font-hand-ui text-lg sm:text-xl font-bold text-[#1c1a17]">
+                  <h3 className="font-hand-ui text-xl font-bold text-[#1c1a17]">
                     {item.headline}
                   </h3>
-                  <p className="font-hand-draft text-xs sm:text-sm text-[#554e46] leading-snug">
+                  <p className="font-hand-draft text-sm text-[#554e46] leading-snug">
                     {item.caption}
                   </p>
                   
                   <div className="pt-1.5 flex items-center justify-center gap-1.5 text-[#3a3530]">
-                    <span className="font-hand-note text-sm sm:text-base font-semibold">
+                    <span className="font-hand-note text-base font-semibold">
                       ({item.note})
                     </span>
                   </div>
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* ========================================================================= */}
+          {/* 2. MOBILE VIEW: Interactive Carousel with Touch Navigation (below md)     */}
+          {/* ========================================================================= */}
+          <div className="md:hidden flex flex-col items-center w-full max-w-sm mx-auto">
+            {/* Active Card Card Display */}
+            <div className="relative w-full aspect-[4/3] max-w-[300px] flex items-center justify-center">
+              <Image
+                src={steps[activeSlide].src}
+                alt={steps[activeSlide].alt}
+                fill
+                sizes="300px"
+                className="object-contain filter drop-shadow-[4px_6px_1px_rgba(35,31,28,0.42)] transition-all duration-300"
+                priority
+              />
+            </div>
+
+            {/* Active Card Text */}
+            <div className="mt-3 space-y-1 text-center max-w-[280px]">
+              <h3 className="font-hand-ui text-xl font-bold text-[#1c1a17]">
+                {steps[activeSlide].headline}
+              </h3>
+              <p className="font-hand-draft text-sm text-[#554e46] leading-snug">
+                {steps[activeSlide].caption}
+              </p>
+              <div className="pt-1 text-[#3a3530]">
+                <span className="font-hand-note text-sm font-semibold">
+                  ({steps[activeSlide].note})
+                </span>
+              </div>
+            </div>
+
+            {/* Carousel Controls (Prev, Indicators, Next) */}
+            <div className="flex items-center gap-4 mt-5">
+              <button
+                type="button"
+                onClick={() => setActiveSlide((prev) => (prev === 0 ? steps.length - 1 : prev - 1))}
+                className="sketch-btn w-9 h-9 bg-[#f5eedc] text-[#1c1a17] font-hand-marker text-lg flex items-center justify-center hover:bg-[#eae2cf] transition-colors"
+                aria-label="Previous step"
+              >
+                ‹
+              </button>
+
+              {/* Step indicator pills */}
+              <div className="flex items-center gap-2">
+                {steps.map((_, dotIdx) => (
+                  <button
+                    key={dotIdx}
+                    type="button"
+                    onClick={() => setActiveSlide(dotIdx)}
+                    className={`h-2.5 rounded-full transition-all duration-200 ${
+                      activeSlide === dotIdx
+                        ? "w-7 bg-[#231f1c]"
+                        : "w-2.5 bg-[#231f1c]/30 hover:bg-[#231f1c]/50"
+                    }`}
+                    aria-label={`Go to slide ${dotIdx + 1}`}
+                  />
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setActiveSlide((prev) => (prev === steps.length - 1 ? 0 : prev + 1))}
+                className="sketch-btn w-9 h-9 bg-[#f5eedc] text-[#1c1a17] font-hand-marker text-lg flex items-center justify-center hover:bg-[#eae2cf] transition-colors"
+                aria-label="Next step"
+              >
+                ›
+              </button>
+            </div>
+
+            <span className="font-hand-note text-xs text-[#716960] mt-2">
+              Step {activeSlide + 1} of 3 ✎
+            </span>
           </div>
 
           {/* Clean Bottom Action Bar */}

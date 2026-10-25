@@ -14,9 +14,14 @@ declare global {
 }
 
 export default function PricingSection({ demoUrl }: PricingProps) {
+  // Modal state for collecting buyer GitHub username & email
+  const [checkoutModalOpen, setCheckoutModalOpen] = useState(false);
   const [githubUser, setGithubUser] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  // Post-purchase success state
   const [statusModal, setStatusModal] = useState<{
     open: boolean;
     title: string;
@@ -30,16 +35,29 @@ export default function PricingSection({ demoUrl }: PricingProps) {
     success: false,
   });
 
-  const handleCheckout = async () => {
+  const handleStartPurchase = () => {
+    setErrorMsg("");
+    setCheckoutModalOpen(true);
+  };
+
+  const handleProceedToPayment = async (e: React.FormEvent) => {
+    e.preventDefault();
+
     if (!githubUser.trim()) {
-      alert("Please enter your GitHub username first so we can grant you repo access!");
+      setErrorMsg("Please enter your GitHub username so we can invite you to the private repository.");
+      return;
+    }
+
+    if (!customerEmail.trim()) {
+      setErrorMsg("Please enter your email address for your order confirmation and receipt.");
       return;
     }
 
     setLoading(true);
+    setErrorMsg("");
 
     try {
-      // 1. Create order on backend
+      // 1. Create Razorpay order on backend
       const res = await fetch("/api/razorpay/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -51,6 +69,9 @@ export default function PricingSection({ demoUrl }: PricingProps) {
         throw new Error(data.error || "Could not initialize checkout order");
       }
 
+      // Close details modal before opening Razorpay
+      setCheckoutModalOpen(false);
+
       // 2. Open Razorpay Checkout modal
       const options = {
         key: data.keyId,
@@ -60,13 +81,13 @@ export default function PricingSection({ demoUrl }: PricingProps) {
         description: "LaunchFast Next.js 16 + Supabase + Stripe Starter",
         order_id: data.orderId,
         prefill: {
-          email: customerEmail || "rahul@example.com",
+          email: customerEmail,
         },
         theme: {
           color: "#231f1c",
         },
         handler: async function (response: any) {
-          // 3. Verify payment & send GitHub invite
+          // 3. Verify payment signature & trigger automated GitHub invite
           try {
             const verifyRes = await fetch("/api/razorpay/verify-payment", {
               method: "POST",
@@ -116,7 +137,8 @@ export default function PricingSection({ demoUrl }: PricingProps) {
       });
       rzp.open();
     } catch (err: any) {
-      alert("Checkout error: " + err.message);
+      setErrorMsg("Checkout error: " + err.message);
+      setCheckoutModalOpen(true);
     } finally {
       setLoading(false);
     }
@@ -136,33 +158,6 @@ export default function PricingSection({ demoUrl }: PricingProps) {
         </h2>
         <p className="font-hand-draft text-sm sm:text-lg text-[#554e46]">
           Stop wasting 3 weeks re-writing authentication, Stripe logic, and email plumbing.
-        </p>
-      </div>
-
-      {/* GitHub Username Input Step */}
-      <div className="max-w-md mx-auto mb-8 sm:mb-10 p-4 sm:p-5 bg-[#fcf9f2] sketch-border shadow-[3px_3px_0px_#231f1c] text-center space-y-3">
-        <label className="block font-hand-ui text-sm sm:text-base font-bold text-[#1c1a17]">
-          Step 1: Enter your GitHub Username for Repo Invitation
-        </label>
-        <div className="flex flex-col sm:flex-row gap-2">
-          <input
-            type="text"
-            required
-            value={githubUser}
-            onChange={(e) => setGithubUser(e.target.value)}
-            placeholder="e.g. rahul-dev"
-            className="w-full sm:flex-1 px-3.5 py-2 text-sm bg-white border border-[#231f1c]/40 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#231f1c]"
-          />
-          <input
-            type="email"
-            value={customerEmail}
-            onChange={(e) => setCustomerEmail(e.target.value)}
-            placeholder="your-email@gmail.com"
-            className="w-full sm:flex-1 px-3.5 py-2 text-sm bg-white border border-[#231f1c]/40 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#231f1c]"
-          />
-        </div>
-        <p className="font-hand-note text-xs text-[#716960]">
-          Upon payment, GitHub API automatically adds this user as a collaborator to the private codebase repository!
         </p>
       </div>
 
@@ -215,29 +210,113 @@ export default function PricingSection({ demoUrl }: PricingProps) {
 
           <div className="pt-6 sm:pt-8">
             <button
-              onClick={handleCheckout}
-              disabled={loading}
-              className="sketch-btn w-full py-3 sm:py-3.5 bg-[#f5eedc] text-[#1c1a17] font-hand-draft text-lg sm:text-xl font-bold tracking-wide hover:bg-[#fffdf8] transition-all shadow-[3px_3px_0px_#554e46] sm:shadow-[4px_4px_0px_#554e46]"
+              onClick={handleStartPurchase}
+              className="sketch-btn w-full py-3.5 bg-[#f5eedc] text-[#1c1a17] font-hand-draft text-xl font-bold tracking-wide hover:bg-[#fffdf8] transition-all shadow-[4px_4px_0px_#554e46]"
             >
-              {loading ? "Opening Checkout..." : "Get LaunchFast ($49) →"}
+              Get LaunchFast ($49) →
             </button>
             <p className="text-center font-hand-note text-[11px] sm:text-xs text-[#a89f92] mt-2 sm:mt-2.5">
-              Secure payment via Razorpay (UPI, Credit/Debit Cards, NetBanking, International)
+              Secure one-time payment via Razorpay (Cards, UPI, NetBanking, International)
             </p>
           </div>
         </div>
       </div>
 
+      {/* Step Modal: Enter GitHub Username and Email */}
+      {checkoutModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-150">
+          <div className="bg-[#f5eedc] text-[#1c1a17] max-w-md w-full p-6 sm:p-7 sketch-border shadow-[6px_6px_0px_#231f1c] space-y-5">
+            <div className="flex items-start justify-between">
+              <div>
+                <span className="font-hand-note text-xs font-semibold px-2.5 py-0.5 bg-[#231f1c]/10 rounded">
+                  Instant Code Delivery
+                </span>
+                <h3 className="font-hand-marker text-2xl sm:text-3xl text-[#1c1a17] mt-1">
+                  Where should we send your code?
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setCheckoutModalOpen(false)}
+                className="font-hand-marker text-xl p-1 text-[#554e46] hover:text-black"
+              >
+                ✕
+              </button>
+            </div>
+
+            {errorMsg && (
+              <div className="p-3 text-xs bg-red-100 border border-red-300 text-red-800 rounded font-medium">
+                {errorMsg}
+              </div>
+            )}
+
+            <form onSubmit={handleProceedToPayment} className="space-y-4">
+              <div className="space-y-1 text-left">
+                <label className="block font-hand-ui text-sm font-bold text-[#1c1a17]">
+                  GitHub Username <span className="text-red-600">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={githubUser}
+                  onChange={(e) => setGithubUser(e.target.value)}
+                  placeholder="e.g. rahul-dev"
+                  className="w-full px-3.5 py-2.5 text-sm bg-white border border-[#231f1c]/40 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#231f1c]"
+                />
+                <p className="font-hand-note text-[11px] text-[#554e46]">
+                  GitHub API will automatically add this username as a collaborator to the private codebase repo.
+                </p>
+              </div>
+
+              <div className="space-y-1 text-left">
+                <label className="block font-hand-ui text-sm font-bold text-[#1c1a17]">
+                  Email Address <span className="text-red-600">*</span>
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={customerEmail}
+                  onChange={(e) => setCustomerEmail(e.target.value)}
+                  placeholder="name@example.com"
+                  className="w-full px-3.5 py-2.5 text-sm bg-white border border-[#231f1c]/40 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#231f1c]"
+                />
+                <p className="font-hand-note text-[11px] text-[#554e46]">
+                  Your receipt and setup guide will be sent here.
+                </p>
+              </div>
+
+              <div className="pt-2 flex flex-col gap-2">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="sketch-btn w-full py-3 bg-[#231f1c] text-[#f5eedc] font-hand-draft text-lg font-bold tracking-wide hover:bg-[#38322d] transition-all shadow-[3px_3px_0px_#554e46]"
+                >
+                  {loading ? "Opening Razorpay..." : "Proceed to Payment ($49) →"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCheckoutModalOpen(false)}
+                  className="font-hand-draft text-xs text-[#554e46] hover:underline text-center py-1"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Post-Purchase Success Modal */}
       {statusModal.open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-150">
           <div className="bg-[#f5eedc] text-[#1c1a17] max-w-md w-full p-6 sketch-border shadow-[6px_6px_0px_#231f1c] space-y-4">
             <h3 className="font-hand-marker text-2xl text-[#1c1a17]">{statusModal.title}</h3>
             <p className="font-hand-draft text-sm text-[#554e46]">{statusModal.message}</p>
 
             {statusModal.repo && (
               <div className="p-3 bg-white border border-[#231f1c]/30 rounded-lg text-xs font-mono space-y-2">
-                <p className="text-neutral-500 font-sans font-semibold">Clone your private repository:</p>
+                <p className="text-neutral-500 font-sans font-semibold">1. Accept invitation on GitHub</p>
+                <p className="text-neutral-500 font-sans font-semibold">2. Clone your private repository:</p>
                 <code className="text-black block bg-neutral-100 p-2 rounded select-all">
                   git clone https://github.com/{statusModal.repo}.git my-new-saas
                 </code>
