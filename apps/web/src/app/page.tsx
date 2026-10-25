@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import PricingSection from "../components/pricing-section";
 
 export default function HomePage() {
   const demoUrl = process.env.NEXT_PUBLIC_DEMO_URL || (typeof window !== "undefined" && window.location.hostname === "localhost" ? "http://localhost:3001" : "https://demo.launchfast.naitik.work");
@@ -196,6 +197,11 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        {/* ========================================================================= */}
+        {/* PRICING & RAZORPAY CODE DELIVERY (Option B GitHub Collaboration)          */}
+        {/* ========================================================================= */}
+        <PricingSection demoUrl={demoUrl} />
 
         {/* ========================================================================= */}
         {/* FOOTER: HAND-DRAWN PAPER ARTIST FOOTER                                    */}
