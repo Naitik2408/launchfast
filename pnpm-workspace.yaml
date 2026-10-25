@@ -1,3 +1,7 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
 allowBuilds:
-  sharp: false
-  unrs-resolver: false
+  unrs-resolver: true
+  "@turbo/windows-64": true

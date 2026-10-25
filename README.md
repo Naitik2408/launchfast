@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SaaS Boilerplate Platform — Architecture & Master Plan
+> **Internal Project Roadmap & Engineering Blueprint**
+> *Reference Conversation:* `f324abaf-066b-42c8-9893-da8a28aa781e` ("Building a Code Template SaaS")
 
-## Getting Started
+---
 
-First, run the development server:
+## 1. Executive Summary & Philosophy
+This repository serves as the central hub and monorepo engine for building, showcasing, and distributing production-ready code boilerplates for developers.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### Core Philosophy:
+1. **Solve Boring Plumbing:** Developers love building their unique business logic but hate wiring authentication, payment webhooks, database RLS policies, email providers, and plan gating repeatedly.
+2. **Speed & Complete Canvas:** Provide a fully functional, high-conversion landing page, authenticated dashboard shell, Stripe/Razorpay billing portal, and settings out-of-the-box.
+3. **Monorepo for Us, Clean Standalone for Buyers:**
+   - **Internally:** We manage templates and shared packages in this single monorepo (`packages/ui`, `packages/auth`, `packages/billing`, etc.) to minimize maintenance and fix bugs in one place.
+   - **For Customers:** When a customer purchases a template, an automated exporter/packager strips out the monorepo clutter and delivers a clean, standalone repository (or ZIP) containing only that template and its pre-resolved dependencies.
+
+---
+
+## 2. Monorepo Architecture Blueprint
+
+```
+saas-boilerplate-platform/
+├── package.json                   # Root workspace config (pnpm + Turborepo)
+├── turbo.json                     # Pipeline orchestration (build, lint, dev)
+├── pnpm-workspace.yaml            # Workspace package definitions
+│
+├── apps/
+│   ├── web/                       # OUR PLATFORM / LANDING PAGE: Sells & showcases templates
+│   ├── template-nextjs-stripe/    # Template #1: Next.js + Supabase + Stripe + Resend
+│   ├── template-nextjs-razorpay/  # Template #2: Next.js + Supabase + Razorpay (India & Global)
+│   └── template-free-starter/     # Free lead magnet template
+│
+└── packages/                      # SHARED CORE ENGINE
+    ├── ui/                        # Reusable Tailwind & Lucide components
+    ├── auth/                      # Universal Supabase auth handlers & session helpers
+    ├── billing/                   # Universal Stripe/Razorpay webhooks & portal actions
+    ├── email/                     # Transactional email templates (React Email / Resend)
+    └── config/                    # Shared tsconfig, tailwind, eslint configs
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 3. Scope of Template #1 (Flagship Stack)
+The primary high-demand template:
+- **Framework:** Next.js (App Router, Server Actions, TypeScript)
+- **Styling:** Tailwind CSS + Radix/Lucide icons
+- **Database & Auth:** Supabase (PostgreSQL with RLS, magic link, email/password, Google OAuth)
+- **Payments:** Stripe Subscription Checkout + Webhook listener + Customer Portal
+- **Emails:** Resend (Welcome email, invoice confirmation)
+- **Pre-Built Universal Features:**
+  - **Landing Page:** Hero, Social proof, Features, Interactive pricing toggle, FAQ, Footer
+  - **Authentication:** Login, Register, Forgot Password, Reset Password
+  - **Protected Dashboard Shell:** Sidebar, topbar, user profile switcher, empty state canvas
+  - **Settings & Profile:** Avatar upload, display name, email, password change, account deletion
+  - **Billing Management:** View current tier, renew date, upgrade/downgrade, invoices, card update
+  - **Plan Gating System:** Reusable client-side `<FeatureGate>` and server-side `requirePlan('pro')` guard
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 4. Platform Landing Page Architecture (Current Deliverable)
+The platform landing page (`apps/web` or root starter) is our direct storefront:
+- Dark cyber aesthetic with high contrast accents (inspired by the provided layout design).
+- Header with direct navigation, social links, and Primary CTA button.
+- Hero with badge, dynamic headline, punchy value prop, interactive counter cards / stats, and quick-purchase/demo widget.
+- Feature Grid with custom cards, badges, and tech badges.
+- Step-by-step Roadmap / How It Works section.
+- About / Guarantee Bento Grid.
+- Interactive Accordion FAQ.
+- Sticky or sleek bottom footer.

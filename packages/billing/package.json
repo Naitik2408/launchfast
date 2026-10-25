@@ -1,0 +1,17 @@
+{
+  "name": "@repo/billing",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "stripe": "^17.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "typescript": "5.9.3"
+  }
+}

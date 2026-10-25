@@ -1,0 +1,64 @@
+const fs = require('fs');
+
+const pepeSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
+  <defs>
+    <radialGradient id="pepeSkin" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#69ac2c"/>
+      <stop offset="60%" stop-color="#559124"/>
+      <stop offset="100%" stop-color="#3c6e18"/>
+    </radialGradient>
+    <filter id="pepeGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#14532d" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Head Base Contour -->
+  <path d="M 85 270 C 60 190, 110 80, 230 80 C 290 80, 340 115, 370 160 C 400 200, 390 270, 360 320 C 330 360, 260 380, 200 375 C 130 370, 95 330, 85 270 Z" 
+        fill="url(#pepeSkin)" stroke="#09140c" stroke-width="12" stroke-linejoin="round" filter="url(#pepeGlow)"/>
+
+  <!-- Left Upper Eye Contour -->
+  <path d="M 125 185 C 115 105, 220 95, 225 185" fill="url(#pepeSkin)" stroke="#09140c" stroke-width="12"/>
+  <!-- Left Eye Sclera (Bulging White) -->
+  <ellipse cx="178" cy="180" rx="44" ry="36" fill="#f8fafc" stroke="#09140c" stroke-width="10"/>
+  <!-- Left Pupil -->
+  <ellipse cx="186" cy="184" rx="16" ry="16" fill="#09140c"/>
+  <circle cx="192" cy="178" r="5" fill="#ffffff"/>
+  <!-- Left Heavy Eyelid line -->
+  <path d="M 120 145 C 150 120, 200 130, 230 165" stroke="#09140c" stroke-width="10" fill="none" stroke-linecap="round"/>
+
+  <!-- Right Upper Eye Contour -->
+  <path d="M 245 180 C 240 100, 350 105, 340 185" fill="url(#pepeSkin)" stroke="#09140c" stroke-width="12"/>
+  <!-- Right Eye Sclera (Bulging White) -->
+  <ellipse cx="295" cy="175" rx="42" ry="34" fill="#f8fafc" stroke="#09140c" stroke-width="10"/>
+  <!-- Right Pupil -->
+  <ellipse cx="302" cy="180" rx="15" ry="15" fill="#09140c"/>
+  <circle cx="308" cy="174" r="5" fill="#ffffff"/>
+  <!-- Right Heavy Eyelid line -->
+  <path d="M 240 140 C 270 120, 320 130, 345 160" stroke="#09140c" stroke-width="10" fill="none" stroke-linecap="round"/>
+
+  <!-- Nostrils -->
+  <ellipse cx="220" cy="235" rx="4" ry="7" fill="#09140c" transform="rotate(-15 220 235)"/>
+  <ellipse cx="245" cy="235" rx="4" ry="7" fill="#09140c" transform="rotate(15 245 235)"/>
+
+  <!-- Big Iconic Pepe Red / Orange Smile Lips -->
+  <!-- Upper Lip Contour -->
+  <path d="M 120 260 C 180 280, 290 280, 365 245 C 385 285, 335 315, 250 315 C 175 315, 115 295, 120 260 Z" 
+        fill="#dc2626" stroke="#09140c" stroke-width="11" stroke-linejoin="round"/>
+  <!-- Lower Lip Fold -->
+  <path d="M 145 295 C 205 340, 295 340, 345 290 C 335 345, 260 360, 210 355 C 165 350, 140 325, 145 295 Z" 
+        fill="#b91c1c" stroke="#09140c" stroke-width="11" stroke-linejoin="round"/>
+
+  <!-- Resting Hand on Chin (Developer / Thinker Pepe) -->
+  <g transform="translate(250, 285)">
+    <!-- Main Hand Outline -->
+    <path d="M 15 45 C -10 35, -35 50, -35 75 C -35 110, 15 130, 55 125 C 80 120, 95 95, 90 65 C 85 40, 45 25, 15 45 Z" 
+          fill="url(#pepeSkin)" stroke="#09140c" stroke-width="11" stroke-linejoin="round"/>
+    <!-- Folded Fingers -->
+    <path d="M -15 50 C -28 40, -48 60, -38 78 C -30 90, -10 80, 2 68" fill="url(#pepeSkin)" stroke="#09140c" stroke-width="10" stroke-linecap="round"/>
+    <path d="M 10 48 C 2 32, -18 38, -10 60" fill="none" stroke="#09140c" stroke-width="9" stroke-linecap="round"/>
+    <path d="M 32 50 C 28 32, 8 36, 14 58" fill="none" stroke="#09140c" stroke-width="9" stroke-linecap="round"/>
+  </g>
+</svg>`;
+
+fs.writeFileSync('public/pepe-mascot-hero.svg', pepeSvg);
+console.log('Pepe SVG generated cleanly!');

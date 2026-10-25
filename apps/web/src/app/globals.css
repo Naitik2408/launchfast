@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f5eedc;
+  --foreground: #1c1a17;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-kalam: var(--font-kalam);
+  --font-caveat: var(--font-caveat);
+  --font-draft: var(--font-draft);
+  --font-marker: var(--font-marker);
+}
+
+body {
+  background-color: #f5eedc;
+  color: #1c1a17;
+  font-family: var(--font-kalam), cursive, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Typography styles */
+.font-hand-ui {
+  font-family: var(--font-kalam), cursive, sans-serif;
+}
+
+.font-hand-note {
+  font-family: var(--font-caveat), cursive, sans-serif;
+}
+
+.font-hand-draft {
+  font-family: var(--font-draft), cursive, sans-serif;
+}
+
+.font-hand-marker {
+  font-family: var(--font-marker), cursive, sans-serif;
+}
+
+/* Organic hand-drawn borders with imperfect radii */
+.sketch-border {
+  border: 1.5px solid #231f1c;
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+}
+
+.sketch-border-pill {
+  border: 1.5px solid #231f1c;
+  border-radius: 255px 25px 225px 25px / 25px 225px 25px 255px;
+}
+
+.sketch-border-sharp {
+  border: 1.5px solid #231f1c;
+  border-radius: 12px 4px 14px 5px;
+}
+
+/* Soft pencil / ink sketch line */
+.sketch-line {
+  border-bottom: 1.5px solid #231f1c;
+}
+
+/* Delicate subtle paper grid matching industrial design sketches */
+.paper-grid {
+  background-image: 
+    linear-gradient(to right, rgba(44, 38, 32, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(44, 38, 32, 0.035) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Hand-drawn button active press effect */
+.sketch-btn {
+  border: 1.5px solid #231f1c;
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  box-shadow: 2px 2.5px 0px #231f1c;
+  transition: all 0.12s ease;
+}
+
+.sketch-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3.5px 0px #231f1c;
+}
+
+.sketch-btn:active {
+  transform: translate(1.5px, 1.5px);
+  box-shadow: 0.5px 0.5px 0px #231f1c;
+}
