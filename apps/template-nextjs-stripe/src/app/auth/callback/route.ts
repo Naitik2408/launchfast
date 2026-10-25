@@ -6,14 +6,24 @@ export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
   const next = searchParams.get("next") || "/dashboard";
+  const error = searchParams.get("error");
+  const errorDescription = searchParams.get("error_description");
+
+  if (error || errorDescription) {
+    console.error("Auth callback received error from provider:", error, errorDescription);
+    const reason = encodeURIComponent(errorDescription || error || "unknown");
+    return NextResponse.redirect(`${origin}/login?error=${reason}`);
+  }
 
   if (code) {
     const cookieStore = await cookies();
     const supabase = createServerClient(cookieStore);
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) {
+    const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+    if (!exchangeError) {
       return NextResponse.redirect(`${origin}${next}`);
     }
+    console.error("Supabase exchangeCodeForSession error:", exchangeError);
+    return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(exchangeError.message)}`);
   }
 
   // Return the user to login with an error query

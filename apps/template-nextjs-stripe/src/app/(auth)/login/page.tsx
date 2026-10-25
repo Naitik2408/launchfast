@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createBrowserClient } from "@repo/auth";
@@ -12,6 +12,22 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Check URL parameters for errors
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const urlError = params.get("error");
+      const hash = window.location.hash;
+      if (urlError) {
+        setErrorMsg(decodeURIComponent(urlError));
+      } else if (hash && hash.includes("error_description=")) {
+        const hashParams = new URLSearchParams(hash.substring(1));
+        const hashDesc = hashParams.get("error_description");
+        if (hashDesc) setErrorMsg(decodeURIComponent(hashDesc));
+      }
+    }
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
