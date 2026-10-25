@@ -30,7 +30,7 @@ const permanentMarker = Permanent_Marker({
 });
 
 export const metadata: Metadata = {
-  title: "SaaSCraft | Hand-Drawn Blueprint SaaS Starter",
+  title: "LaunchFast | Hand-Drawn Blueprint SaaS Starter",
   description: "Architectural hand-drawn UI for developers building production SaaS platforms.",
 };
 
@@ -40,8 +40,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
+        suppressHydrationWarning
         className={`${kalam.variable} ${caveat.variable} ${patrickHand.variable} ${permanentMarker.variable} min-h-screen bg-[#f5eedc] text-[#1c1a17] antialiased selection:bg-[#2c2824] selection:text-[#fbf9f4]`}
       >
         {children}

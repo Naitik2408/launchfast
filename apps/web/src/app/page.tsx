@@ -157,6 +157,7 @@ export default function HomePage() {
                     src={item.src}
                     alt={item.alt}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 360px"
                     className="object-contain filter drop-shadow-[4px_6px_1px_rgba(35,31,28,0.42)] hover:drop-shadow-[6px_9px_1px_rgba(35,31,28,0.28)] transition-all duration-200"
                     priority
                   />
