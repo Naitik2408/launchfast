@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import PricingSection from "../components/pricing-section";
@@ -8,6 +8,7 @@ import PricingSection from "../components/pricing-section";
 export default function HomePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const demoUrl = process.env.NEXT_PUBLIC_DEMO_URL || (typeof window !== "undefined" && window.location.hostname === "localhost" ? "http://localhost:3001" : "https://demo.launchfast.naitik.work");
 
   const steps = [
@@ -219,77 +220,84 @@ export default function HomePage() {
           </div>
 
           {/* ========================================================================= */}
-          {/* 2. MOBILE VIEW: Interactive Carousel with Touch Navigation (below md)     */}
+          {/* 2. MOBILE VIEW: Native Touch Swipe Carousel (no left/right buttons)       */}
           {/* ========================================================================= */}
-          <div className="md:hidden flex flex-col items-center w-full max-w-sm mx-auto">
-            {/* Active Card Card Display */}
-            <div className="relative w-full aspect-[4/3] max-w-[300px] flex items-center justify-center">
-              <Image
-                src={steps[activeSlide].src}
-                alt={steps[activeSlide].alt}
-                fill
-                sizes="300px"
-                className="object-contain filter drop-shadow-[4px_6px_1px_rgba(35,31,28,0.42)] transition-all duration-300"
-                priority
-              />
+          <div className="md:hidden w-full max-w-sm mx-auto">
+            {/* Horizontal Touch Scroll Snap Container */}
+            <div
+              ref={scrollContainerRef}
+              onScroll={(e) => {
+                const el = e.currentTarget;
+                const index = Math.round(el.scrollLeft / el.clientWidth);
+                if (index !== activeSlide && index >= 0 && index < steps.length) {
+                  setActiveSlide(index);
+                }
+              }}
+              className="flex overflow-x-auto snap-x snap-mandatory scrollbar-none scroll-smooth w-full pb-2 -mx-4 px-4"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            >
+              {steps.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="w-full shrink-0 snap-center flex flex-col items-center text-center px-2"
+                >
+                  <div className="relative w-full aspect-[4/3] max-w-[290px] flex items-center justify-center">
+                    <Image
+                      src={item.src}
+                      alt={item.alt}
+                      fill
+                      sizes="290px"
+                      className="object-contain filter drop-shadow-[4px_6px_1px_rgba(35,31,28,0.42)]"
+                      priority={idx === 0}
+                    />
+                  </div>
+
+                  <div className="mt-3 space-y-1 max-w-[270px]">
+                    <h3 className="font-hand-ui text-xl font-bold text-[#1c1a17]">
+                      {item.headline}
+                    </h3>
+                    <p className="font-hand-draft text-sm text-[#554e46] leading-snug">
+                      {item.caption}
+                    </p>
+                    <div className="pt-1 text-[#3a3530]">
+                      <span className="font-hand-note text-sm font-semibold">
+                        ({item.note})
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
 
-            {/* Active Card Text */}
-            <div className="mt-3 space-y-1 text-center max-w-[280px]">
-              <h3 className="font-hand-ui text-xl font-bold text-[#1c1a17]">
-                {steps[activeSlide].headline}
-              </h3>
-              <p className="font-hand-draft text-sm text-[#554e46] leading-snug">
-                {steps[activeSlide].caption}
-              </p>
-              <div className="pt-1 text-[#3a3530]">
-                <span className="font-hand-note text-sm font-semibold">
-                  ({steps[activeSlide].note})
-                </span>
-              </div>
-            </div>
-
-            {/* Carousel Controls (Prev, Indicators, Next) */}
-            <div className="flex items-center gap-4 mt-5">
-              <button
-                type="button"
-                onClick={() => setActiveSlide((prev) => (prev === 0 ? steps.length - 1 : prev - 1))}
-                className="sketch-btn w-9 h-9 bg-[#f5eedc] text-[#1c1a17] font-hand-marker text-lg flex items-center justify-center hover:bg-[#eae2cf] transition-colors"
-                aria-label="Previous step"
-              >
-                ‹
-              </button>
-
-              {/* Step indicator pills */}
+            {/* Slide Dot Indicators + Step Counter */}
+            <div className="flex flex-col items-center justify-center gap-1.5 mt-3">
               <div className="flex items-center gap-2">
                 {steps.map((_, dotIdx) => (
                   <button
                     key={dotIdx}
                     type="button"
-                    onClick={() => setActiveSlide(dotIdx)}
-                    className={`h-2.5 rounded-full transition-all duration-200 ${
+                    onClick={() => {
+                      if (scrollContainerRef.current) {
+                        scrollContainerRef.current.scrollTo({
+                          left: dotIdx * scrollContainerRef.current.clientWidth,
+                          behavior: "smooth",
+                        });
+                      }
+                      setActiveSlide(dotIdx);
+                    }}
+                    className={`h-2 rounded-full transition-all duration-200 ${
                       activeSlide === dotIdx
-                        ? "w-7 bg-[#231f1c]"
-                        : "w-2.5 bg-[#231f1c]/30 hover:bg-[#231f1c]/50"
+                        ? "w-6 bg-[#231f1c]"
+                        : "w-2 bg-[#231f1c]/30 hover:bg-[#231f1c]/50"
                     }`}
                     aria-label={`Go to slide ${dotIdx + 1}`}
                   />
                 ))}
               </div>
-
-              <button
-                type="button"
-                onClick={() => setActiveSlide((prev) => (prev === steps.length - 1 ? 0 : prev + 1))}
-                className="sketch-btn w-9 h-9 bg-[#f5eedc] text-[#1c1a17] font-hand-marker text-lg flex items-center justify-center hover:bg-[#eae2cf] transition-colors"
-                aria-label="Next step"
-              >
-                ›
-              </button>
+              <span className="font-hand-note text-xs text-[#716960]">
+                Step {activeSlide + 1} of 3 ✎ (swipe with finger)
+              </span>
             </div>
-
-            <span className="font-hand-note text-xs text-[#716960] mt-2">
-              Step {activeSlide + 1} of 3 ✎
-            </span>
           </div>
 
           {/* Clean Bottom Action Bar */}
