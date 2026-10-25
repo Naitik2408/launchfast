@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function HomePage() {
+  const demoUrl = process.env.NEXT_PUBLIC_DEMO_URL || (typeof window !== "undefined" && window.location.hostname === "localhost" ? "http://localhost:3001" : "https://demo.launchfast.naitik.work");
+
   const steps = [
     {
       step: "01",
@@ -92,7 +94,7 @@ export default function HomePage() {
             </a>
 
             <a
-              href="https://demo.launchfast.naitik.work"
+              href={demoUrl}
               target="_blank"
               rel="noreferrer"
               className="sketch-btn px-5 py-1.5 bg-[#f5eedc] text-[#1c1a17] font-hand-draft text-base sm:text-lg font-bold tracking-wide flex items-center gap-2 hover:bg-[#eae2cf] transition-colors"
@@ -233,7 +235,7 @@ export default function HomePage() {
               </a>
 
               <a
-                href="https://demo.launchfast.naitik.work"
+                href={demoUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="hover:text-black transition-colors relative group"
