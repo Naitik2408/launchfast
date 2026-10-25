@@ -44,13 +44,13 @@ export default function HomePage() {
         {/* ========================================================================= */}
         {/* HEADER (Logo, Pricing, Demo)                                              */}
         {/* ========================================================================= */}
-        <header className="relative flex items-center justify-between pb-4">
+        <header className="relative flex flex-col xs:flex-row items-center justify-between gap-3 sm:gap-4 pb-4">
           {/* Logo */}
-          <Link href="/" className="group flex items-center gap-2 sm:gap-2.5">
-            <div className="relative w-9 h-9 sm:w-10 sm:h-10 sketch-border flex items-center justify-center bg-transparent group-hover:rotate-[-2deg] transition-transform shrink-0">
+          <Link href="/" className="group flex items-center gap-2 sm:gap-2.5 self-start xs:self-auto">
+            <div className="relative w-8 h-8 sm:w-10 sm:h-10 sketch-border flex items-center justify-center bg-transparent group-hover:rotate-[-2deg] transition-transform shrink-0">
               <svg
-                width="20"
-                height="20"
+                width="18"
+                height="18"
                 className="sm:w-6 sm:h-6"
                 viewBox="0 0 24 24"
                 fill="none"
@@ -66,24 +66,24 @@ export default function HomePage() {
             </div>
 
             <div className="flex flex-col">
-              <span className="font-hand-marker text-xl sm:text-2xl tracking-wide leading-none text-[#1c1a17]">
+              <span className="font-hand-marker text-lg sm:text-2xl tracking-wide leading-none text-[#1c1a17]">
                 Launch<span className="text-[#3a3530]">Fast</span>
               </span>
-              <span className="font-hand-note text-xs sm:text-[13px] text-[#554e46] leading-none mt-0.5 tracking-tight">
+              <span className="font-hand-note text-[11px] sm:text-[13px] text-[#554e46] leading-none mt-0.5 tracking-tight">
                 boilerplate v1.0 ✎
               </span>
             </div>
           </Link>
 
           {/* Navigation Links */}
-          <nav className="flex items-center gap-4 sm:gap-8">
+          <nav className="flex items-center gap-4 sm:gap-6 self-end xs:self-auto shrink-0">
             <a
               href="#pricing"
-              className="relative font-hand-ui text-base sm:text-xl font-bold tracking-wide text-[#1c1a17] hover:text-black transition-colors group"
+              className="relative font-hand-ui text-base sm:text-xl font-bold tracking-wide text-[#1c1a17] hover:text-black transition-colors group px-1"
             >
               <span>Pricing</span>
               <svg
-                className="absolute -bottom-1.5 left-0 w-full h-2 text-[#231f1c] opacity-70 group-hover:opacity-100 transition-opacity"
+                className="absolute -bottom-1 left-0 w-full h-1.5 text-[#231f1c] opacity-70 group-hover:opacity-100 transition-opacity"
                 viewBox="0 0 100 12"
                 preserveAspectRatio="none"
                 fill="none"
@@ -99,10 +99,10 @@ export default function HomePage() {
               href={demoUrl}
               target="_blank"
               rel="noreferrer"
-              className="sketch-btn px-3.5 sm:px-5 py-1 sm:py-1.5 bg-[#f5eedc] text-[#1c1a17] font-hand-draft text-sm sm:text-lg font-bold tracking-wide flex items-center gap-1.5 sm:gap-2 hover:bg-[#eae2cf] transition-colors"
+              className="sketch-btn px-3 sm:px-4 py-1 sm:py-1.5 bg-[#f5eedc] text-[#1c1a17] font-hand-draft text-xs sm:text-base font-bold tracking-wide flex items-center gap-1 sm:gap-1.5 hover:bg-[#eae2cf] transition-colors whitespace-nowrap"
             >
               <span>Live Demo</span>
-              <span className="font-hand-note text-base sm:text-lg leading-none">↗</span>
+              <span className="font-hand-note text-sm sm:text-base leading-none">↗</span>
             </a>
           </nav>
 
