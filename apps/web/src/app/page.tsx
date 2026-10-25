@@ -38,19 +38,20 @@ export default function HomePage() {
   ];
 
   return (
-    <main className="min-h-screen bg-[#f5eedc] text-[#1c1a17] paper-grid selection:bg-[#231f1c] selection:text-[#f5eedc] flex flex-col justify-between">
+    <main className="min-h-screen bg-[#f5eedc] text-[#1c1a17] paper-grid selection:bg-[#231f1c] selection:text-[#f5eedc] flex flex-col justify-between overflow-x-hidden">
       {/* Balanced layout container */}
-      <div className="max-w-6xl w-full mx-auto px-6 sm:px-10 py-6 flex-1 flex flex-col">
+      <div className="max-w-6xl w-full mx-auto px-4 sm:px-8 md:px-10 py-4 sm:py-6 flex-1 flex flex-col">
         {/* ========================================================================= */}
         {/* HEADER (Logo, Pricing, Demo)                                              */}
         {/* ========================================================================= */}
         <header className="relative flex items-center justify-between pb-4">
           {/* Logo */}
-          <Link href="/" className="group flex items-center gap-2.5">
-            <div className="relative w-10 h-10 sketch-border flex items-center justify-center bg-transparent group-hover:rotate-[-2deg] transition-transform">
+          <Link href="/" className="group flex items-center gap-2 sm:gap-2.5">
+            <div className="relative w-9 h-9 sm:w-10 sm:h-10 sketch-border flex items-center justify-center bg-transparent group-hover:rotate-[-2deg] transition-transform shrink-0">
               <svg
-                width="24"
-                height="24"
+                width="20"
+                height="20"
+                className="sm:w-6 sm:h-6"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -65,20 +66,20 @@ export default function HomePage() {
             </div>
 
             <div className="flex flex-col">
-              <span className="font-hand-marker text-2xl tracking-wide leading-none text-[#1c1a17]">
+              <span className="font-hand-marker text-xl sm:text-2xl tracking-wide leading-none text-[#1c1a17]">
                 Launch<span className="text-[#3a3530]">Fast</span>
               </span>
-              <span className="font-hand-note text-[13px] text-[#554e46] leading-none mt-0.5 tracking-tight">
+              <span className="font-hand-note text-xs sm:text-[13px] text-[#554e46] leading-none mt-0.5 tracking-tight">
                 boilerplate v1.0 ✎
               </span>
             </div>
           </Link>
 
           {/* Navigation Links */}
-          <nav className="flex items-center gap-6 sm:gap-8">
+          <nav className="flex items-center gap-4 sm:gap-8">
             <a
               href="#pricing"
-              className="relative font-hand-ui text-lg sm:text-xl font-bold tracking-wide text-[#1c1a17] hover:text-black transition-colors group"
+              className="relative font-hand-ui text-base sm:text-xl font-bold tracking-wide text-[#1c1a17] hover:text-black transition-colors group"
             >
               <span>Pricing</span>
               <svg
@@ -98,10 +99,10 @@ export default function HomePage() {
               href={demoUrl}
               target="_blank"
               rel="noreferrer"
-              className="sketch-btn px-5 py-1.5 bg-[#f5eedc] text-[#1c1a17] font-hand-draft text-base sm:text-lg font-bold tracking-wide flex items-center gap-2 hover:bg-[#eae2cf] transition-colors"
+              className="sketch-btn px-3.5 sm:px-5 py-1 sm:py-1.5 bg-[#f5eedc] text-[#1c1a17] font-hand-draft text-sm sm:text-lg font-bold tracking-wide flex items-center gap-1.5 sm:gap-2 hover:bg-[#eae2cf] transition-colors"
             >
               <span>Live Demo</span>
-              <span className="font-hand-note text-lg leading-none">↗</span>
+              <span className="font-hand-note text-base sm:text-lg leading-none">↗</span>
             </a>
           </nav>
 
@@ -122,19 +123,19 @@ export default function HomePage() {
         {/* ========================================================================= */}
         {/* HERO SECTION: MINIMALIST, VISUAL-FIRST STORYTELLING                       */}
         {/* ========================================================================= */}
-        <section className="pt-12 sm:pt-16 pb-12 flex-1 flex flex-col justify-center">
+        <section className="pt-8 sm:pt-14 md:pt-16 pb-8 sm:pb-12 flex-1 flex flex-col justify-center">
           {/* Subtle Hand-Drawn Headline */}
-          <div className="text-center max-w-xl mx-auto mb-10 space-y-1">
-            <h1 className="font-hand-marker text-3xl sm:text-4xl text-[#1c1a17] tracking-wide">
+          <div className="text-center max-w-xl mx-auto mb-8 sm:mb-10 px-2 space-y-1 sm:space-y-1.5">
+            <h1 className="font-hand-marker text-2xl sm:text-4xl text-[#1c1a17] tracking-wide leading-tight">
               Ship your SaaS this weekend.
             </h1>
-            <p className="font-hand-draft text-base sm:text-lg text-[#554e46]">
+            <p className="font-hand-draft text-sm sm:text-lg text-[#554e46]">
               A complete Next.js boilerplate that skips 3 weeks of repetitive plumbing.
             </p>
           </div>
 
           {/* 3 Story Cards with Hand-Sketched Connecting Arrows */}
-          <div className="relative grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 items-start">
+          <div className="relative grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10 md:gap-12 items-start max-w-lg md:max-w-none mx-auto w-full">
             {/* Hand-drawn connecting pencil arrow 1 -> 2 */}
             <div className="hidden md:block absolute top-[28%] left-[30%] -translate-x-1/2 w-20 h-10 pointer-events-none z-10 text-[#3a3530]/70">
               <svg viewBox="0 0 80 40" fill="none" className="w-full h-full stroke-current" strokeWidth="1.6" strokeLinecap="round">
@@ -152,8 +153,8 @@ export default function HomePage() {
             </div>
 
             {steps.map((item, idx) => (
-              <div key={idx} className="flex flex-col items-center text-center group">
-                <div className="relative w-full aspect-[4/3] flex items-center justify-center hover:scale-[1.03] transition-all duration-200">
+              <div key={idx} className="flex flex-col items-center text-center group w-full">
+                <div className="relative w-full aspect-[4/3] max-w-[280px] sm:max-w-[320px] md:max-w-none flex items-center justify-center hover:scale-[1.03] transition-all duration-200">
                   <Image
                     src={item.src}
                     alt={item.alt}
@@ -164,16 +165,16 @@ export default function HomePage() {
                   />
                 </div>
 
-                <div className="mt-3 space-y-1 max-w-[240px]">
+                <div className="mt-3 space-y-1 max-w-[260px]">
                   <h3 className="font-hand-ui text-lg sm:text-xl font-bold text-[#1c1a17]">
                     {item.headline}
                   </h3>
-                  <p className="font-hand-draft text-sm text-[#554e46] leading-snug">
+                  <p className="font-hand-draft text-xs sm:text-sm text-[#554e46] leading-snug">
                     {item.caption}
                   </p>
                   
                   <div className="pt-1.5 flex items-center justify-center gap-1.5 text-[#3a3530]">
-                    <span className="font-hand-note text-base font-semibold">
+                    <span className="font-hand-note text-sm sm:text-base font-semibold">
                       ({item.note})
                     </span>
                   </div>
@@ -183,15 +184,15 @@ export default function HomePage() {
           </div>
 
           {/* Clean Bottom Action Bar */}
-          <div className="mt-14 flex flex-col sm:flex-row items-center justify-center gap-4 text-center">
+          <div className="mt-10 sm:mt-14 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 text-center px-4">
             <a
               href="#pricing"
-              className="sketch-btn px-7 py-2.5 bg-[#231f1c] text-[#f5eedc] font-hand-draft text-base sm:text-lg font-bold tracking-wide shadow-[3px_3px_0px_#554e46] hover:bg-[#38322d] transition-all"
+              className="sketch-btn w-full sm:w-auto px-7 py-2.5 bg-[#231f1c] text-[#f5eedc] font-hand-draft text-base sm:text-lg font-bold tracking-wide shadow-[3px_3px_0px_#554e46] hover:bg-[#38322d] transition-all"
             >
               Get The Template &rarr;
             </a>
 
-            <div className="flex items-center gap-2 font-hand-note text-lg text-[#554e46]">
+            <div className="flex items-center gap-1.5 sm:gap-2 font-hand-note text-sm sm:text-lg text-[#554e46]">
               <span>✎</span>
               <span>Next.js 16 • Supabase • Stripe • Resend</span>
             </div>
@@ -220,19 +221,19 @@ export default function HomePage() {
             <path d="M 0 3 Q 250 1.5, 500 3.8 T 1000 2.8" />
           </svg>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-2">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 pt-2">
             {/* Left: Brand */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-center sm:text-left">
               <span className="font-hand-marker text-xl tracking-wide text-[#1c1a17]">
                 LaunchFast
               </span>
-              <span className="font-hand-note text-sm text-[#554e46]">
+              <span className="font-hand-note text-xs sm:text-sm text-[#554e46]">
                 — drawn for builders ✎
               </span>
             </div>
 
             {/* Center / Right: Quick Navigation & Hand-sketched links */}
-            <div className="flex items-center gap-6 font-hand-ui text-sm sm:text-base font-semibold text-[#3a3530]">
+            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 font-hand-ui text-sm sm:text-base font-semibold text-[#3a3530]">
               <a
                 href="#pricing"
                 className="hover:text-black transition-colors relative group"
@@ -264,13 +265,13 @@ export default function HomePage() {
           </div>
 
           {/* Bottom Row: Copyright in its own line */}
-          <div className="mt-4 pt-3 border-t border-[#231f1c]/10 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[#716960]">
+          <div className="mt-4 pt-3 border-t border-[#231f1c]/10 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[#716960] text-center sm:text-left">
             <p className="font-hand-draft">
               © 2026 LaunchFast Boilerplate Platform. All rights reserved.
             </p>
-            <div className="flex items-center gap-3 font-hand-note">
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 font-hand-note">
               <span>Built on Next.js 16 + Supabase + Stripe + Tailwind</span>
-              <span>•</span>
+              <span className="hidden sm:inline">•</span>
               <span>Hand-sketched blueprint edition ✎</span>
             </div>
           </div>
