@@ -63,10 +63,10 @@ export default function HomePage() {
 
             <div className="flex flex-col">
               <span className="font-hand-marker text-2xl tracking-wide leading-none text-[#1c1a17]">
-                SaaS<span className="text-[#3a3530]">Craft</span>
+                Launch<span className="text-[#3a3530]">Fast</span>
               </span>
               <span className="font-hand-note text-[13px] text-[#554e46] leading-none mt-0.5 tracking-tight">
-                blueprint v1.0 ✎
+                boilerplate v1.0 ✎
               </span>
             </div>
           </Link>
@@ -92,8 +92,10 @@ export default function HomePage() {
             </a>
 
             <a
-              href="#demo"
-              className="sketch-btn px-5 py-1.5 bg-[#f5eedc] text-[#1c1a17] font-hand-draft text-base sm:text-lg font-bold tracking-wide flex items-center gap-2"
+              href="https://demo.launchfast.naitik.work"
+              target="_blank"
+              rel="noreferrer"
+              className="sketch-btn px-5 py-1.5 bg-[#f5eedc] text-[#1c1a17] font-hand-draft text-base sm:text-lg font-bold tracking-wide flex items-center gap-2 hover:bg-[#eae2cf] transition-colors"
             >
               <span>Live Demo</span>
               <span className="font-hand-note text-lg leading-none">↗</span>
@@ -213,7 +215,7 @@ export default function HomePage() {
             {/* Left: Brand */}
             <div className="flex items-center gap-2">
               <span className="font-hand-marker text-xl tracking-wide text-[#1c1a17]">
-                SaaSCraft
+                LaunchFast
               </span>
               <span className="font-hand-note text-sm text-[#554e46]">
                 — drawn for builders ✎
@@ -231,7 +233,9 @@ export default function HomePage() {
               </a>
 
               <a
-                href="#demo"
+                href="https://demo.launchfast.naitik.work"
+                target="_blank"
+                rel="noreferrer"
                 className="hover:text-black transition-colors relative group"
               >
                 <span>Live Demo</span>
@@ -239,17 +243,7 @@ export default function HomePage() {
               </a>
 
               <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-black transition-colors flex items-center gap-1.5"
-              >
-                <span>Twitter</span>
-                <span className="font-hand-note text-xs">↗</span>
-              </a>
-
-              <a
-                href="https://github.com"
+                href="https://github.com/Naitik2408/launchfast"
                 target="_blank"
                 rel="noreferrer"
                 className="hover:text-black transition-colors flex items-center gap-1.5"
@@ -263,7 +257,7 @@ export default function HomePage() {
           {/* Bottom Row: Copyright in its own line */}
           <div className="mt-4 pt-3 border-t border-[#231f1c]/10 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[#716960]">
             <p className="font-hand-draft">
-              © 2026 SaaSCraft Boilerplate Platform. All rights reserved.
+              © 2026 LaunchFast Boilerplate Platform. All rights reserved.
             </p>
             <div className="flex items-center gap-3 font-hand-note">
               <span>Built on Next.js 16 + Supabase + Stripe + Tailwind</span>
