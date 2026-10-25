@@ -3,13 +3,12 @@ import Razorpay from "razorpay";
 
 export async function POST(req: Request) {
   try {
-    const { planId = "starter" } = await req.json();
-
     const key_id = process.env.RAZORPAY_KEY_ID || "rzp_test_placeholder";
     const key_secret = process.env.RAZORPAY_KEY_SECRET || "placeholder_secret";
 
-    // Amount in INR paise (e.g. ₹3,999 = 399900 paise, ₹6,999 = 699900 paise)
-    const amount = planId === "complete" ? 699900 : 399900;
+    // $49 USD converted to INR paise for Razorpay
+    // Razorpay standard accounts process in INR: $49 ≈ ₹4,199 (419900 paise)
+    const amountInPaise = 419900;
     const currency = "INR";
 
     const instance = new Razorpay({
@@ -18,12 +17,12 @@ export async function POST(req: Request) {
     });
 
     const options = {
-      amount,
+      amount: amountInPaise,
       currency,
       receipt: `rcpt_${Date.now()}`,
       notes: {
-        product: "LaunchFast Next.js Boilerplate",
-        plan: planId,
+        product: "LaunchFast Next.js 16 Starter Template",
+        usdPrice: "$49",
       },
     };
 
@@ -33,6 +32,7 @@ export async function POST(req: Request) {
       orderId: order.id,
       amount: order.amount,
       currency: order.currency,
+      displayAmount: "$49",
       keyId: key_id,
     });
   } catch (error: any) {
